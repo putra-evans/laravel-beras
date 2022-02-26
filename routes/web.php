@@ -124,6 +124,8 @@ Route::group(['middleware' => ['role:user']], function () {
     Route::get('tambah-produk', [FrontController::class, 'tambah_produk'])->name('tambah-produk');
     Route::get('kurang-produk', [FrontController::class, 'kurang_produk'])->name('kurang-produk');
 
+    Route::get('delete-keranjang', [FrontController::class, 'delete_keranjang'])->name('delete-keranjang');
+
     Route::post('konfirmasi-pesanan', [FrontController::class, 'konfirmasi_pesanan'])->name('konfirmasi-pesanan');
 
 

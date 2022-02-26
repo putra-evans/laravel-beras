@@ -234,15 +234,19 @@ class FrontController extends Controller
     }
     public function upload_pembayaran(Request $request)
     {
+
         $success = false;
         $message = '';
         try {
             $id_pemesanan = $request->input('id_pemesanan');
-            $foto_upload = $request->input('foto_upload');
+
+            $file_bukti = $request->file('file_bukti');
+            $nama_bukti = $file_bukti->hashName();
+            $file_bukti->move(public_path('img'), $nama_bukti);
 
             Fileupload::create([
                 'id_pemesanan' => $id_pemesanan,
-                'file_upload' => $foto_upload,
+                'file_upload' => $nama_bukti,
             ]);
 
             $affected = DB::table('ta_pemesanan')
@@ -262,7 +266,7 @@ class FrontController extends Controller
 
     public function tambah_produk(Request $request)
     {
-        
+
         $id_keranjang = $request->get('id_keranjang');
         $id_produk = $request->get('id_produk');
         $id_user = $request->get('id_user');
@@ -299,6 +303,18 @@ class FrontController extends Controller
                 'qty' => $totqty,
                 'total_harga' => $totharga,
             ]);
+        return $affected;
+    }
+    public function delete_keranjang(Request $request)
+    {
+        $id_keranjang = $request->get('id_keranjang');
+        $id_produk = $request->get('id_produk');
+        $id_user = $request->get('id_user');
+        $affected = DB::table('keranjang')
+            ->where('id_keranjang', $id_keranjang)
+            ->where('id_produk', $id_produk)
+            ->where('id_user', $id_user)
+            ->delete();
         return $affected;
     }
 

@@ -26,9 +26,11 @@ class LaporanController extends Controller
         $bln = $date_explode[1];
 
         $data = DB::table('ta_pemesanan')
-            ->whereMonth('created_at', $bln)
-            ->whereYear('created_at', $thn)
-            ->where('status_pesanan', 'Selesai')
+            ->join('ta_detail_pemesanan', 'ta_detail_pemesanan.id_pemesanan', '=', 'ta_pemesanan.id_pemesanan')
+            ->join('produk', 'ta_detail_pemesanan.id_produk', '=', 'produk.id_produk')
+            ->whereMonth('ta_pemesanan.created_at', $bln)
+            ->whereYear('ta_pemesanan.created_at', $thn)
+            ->where('ta_pemesanan.status_pesanan', 'Selesai')
             ->get()->toArray();
 
         $pdf = PDF::loadView('admin/laporan/print_produk', [
